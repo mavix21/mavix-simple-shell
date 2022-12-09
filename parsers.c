@@ -9,7 +9,6 @@
  */
 struct cmd *parsecmd(char *line)
 {
-	char *es;
 	struct cmd *cmd;
 
 	cmd = parseexec(&line);
