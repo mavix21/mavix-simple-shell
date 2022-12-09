@@ -27,6 +27,7 @@ void bin_exit(char **ps)
 		if (exit_status[i] < '0' || exit_status[i] > '9')
 		{
 			fprintf(stderr, "hsh: exit: %s: numeric argument required\n", temp);
+			safe_free(ps);
 			exit(2);
 		}
 	}
