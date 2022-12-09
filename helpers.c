@@ -27,6 +27,7 @@ pid_t forking(void)
  */
 void handle_sigint(int sig_num)
 {
+	(void) sig_num;
 	signal(SIGINT, &handle_sigint);
 	write(1, "\n$ ", 3);
 }
