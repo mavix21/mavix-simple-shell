@@ -16,9 +16,9 @@ struct cmd *parsecmd(char *line)
 	es = line + strlen(line);
 	cmd = parseline(&line, es);
 	line = anchor;
-	dummy = strtok(line, " \t\n\r\v");
+	dummy = strtok(line, " \t\n\r\v;");
 	while (dummy != NULL)
-		dummy = strtok(NULL, " \t\n\r\v");
+		dummy = strtok(NULL, " \t\n\r\v;");
 	return (cmd);
 }
 
@@ -45,6 +45,7 @@ struct cmd *parseline(char **ps, char *es)
 /**
  * parseexec - builds a node of type struct execcmd
  * @ps: pointer to string
+ * @es: end of string
  *
  * Return: pointer to node of type struct cmd, NULL if first
  * token is not a valid command
