@@ -24,7 +24,8 @@ void free_tree(struct cmd *cmd)
 void safe_free(char **ps)
 {
 	if (ps && *ps)
+	{
 		free(*ps);
-
-	*ps = NULL;
+		*ps = NULL;
+	}
 }
