@@ -12,8 +12,12 @@ int getcmd(char **ps)
 	size_t nbuf = 0;
 	char *linebuffer = NULL;
 
-	/* Print the promt */
-	write(1, "$ ", 2);
+	/* Catch SIGINT (CTRL + C) signal */
+	signal(SIGINT, &handle_sigint);
+
+	/* Print the prompt in interactive mode*/
+	if (isatty(STDIN_FILENO))
+		write(1, "$ ", 2);
 
 	if (*ps != NULL)
 		safe_free(ps);
@@ -23,13 +27,14 @@ int getcmd(char **ps)
 	{
 		safe_free(&linebuffer);
 
-		if (linelen == 0)
+		if (linelen == 0 && isatty(STDIN_FILENO))
 			printf("\nexit\n");
-		else
+		else if (linelen < 0)
 			perror("Error: ");
 
 		return (-1);
 	}
+	linebuffer[strlen(linebuffer) - 1] = '\0';
 	*ps = linebuffer;
 	return (0);
 }
