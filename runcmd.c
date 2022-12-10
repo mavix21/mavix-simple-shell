@@ -12,6 +12,9 @@ void runcmd(struct cmd *cmd)
 	struct listcmd *lcmd;
 	char *strerr;
 
+	if (cmd == NULL)
+		exit(1);
+
 	switch (cmd->type)
 	{
 		case EXEC:
@@ -30,6 +33,7 @@ void runcmd(struct cmd *cmd)
 			if (forking() == 0)
 				runcmd(lcmd->left);
 			wait(0);
+			runcmd(lcmd->right);
 			break;
 	}
 
