@@ -7,8 +7,10 @@
 #include <unistd.h>
 #include <signal.h>
 #include <sys/wait.h>
+#include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
+#include <fcntl.h>
 
 #define EXEC 1
 #define LIST 2
@@ -34,6 +36,20 @@ typedef struct builtins
 	char *builtin;
 	void (*f)(char **);
 } builtin_t;
+
+/**
+ * struct list_s - single linked list
+ * @n: number descriptor
+ * @str: string
+ * @next: pointer to the next node
+ *
+ */
+typedef struct list_s
+{
+	int n;
+	char *str;
+	struct list_s *next;
+} list_t;
 
 /**
  * struct path_node - single linked list
@@ -100,6 +116,7 @@ void runcmd(struct cmd  *) __attribute__((noreturn));
 int getcmd(char **line);
 ssize_t _getline(char **lineptr, size_t *n);
 int reallocate_line(char **lineptr, size_t pos, size_t *n);
+int gettoken(char **ps, char *es, char **q);
 
 /* helpers */
 pid_t forking(void);
@@ -107,7 +124,8 @@ void handle_sigint(int sig_num);
 
 /* parser functions */
 struct cmd *parsecmd(char *line);
-struct cmd *parseexec(char **ps);
+struct cmd *parseexec(char **ps, char *es);
+struct cmd *parseline(char **ps, char *es);
 
 /* constructors */
 struct cmd *execcmd(void);
@@ -116,6 +134,7 @@ struct cmd *listcmd(struct cmd *left, struct cmd *right);
 /* finders */
 char *cmdfinder(char *command);
 int isabuiltin(char *line);
+int peek(char **ps, char *es, char *tokens);
 
 /* free functions */
 void free_tree(struct cmd *cmd);
