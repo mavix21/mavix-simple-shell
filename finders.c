@@ -19,7 +19,7 @@ char *cmdfinder(char *line)
 		return (NULL);
 	}
 
-	token = strtok(line, " \t\n\r\v");
+	token = strtok(line, " \t\n\r\v;");
 	if (token == NULL)
 		return (NULL);
 
@@ -94,13 +94,22 @@ int isabuiltin(char *line)
 	return (1);
 }
 
+/**
+ * peek - checks if the first non whitespace character
+ * matches any token
+ * @ps: pointer to string
+ * @es: end of string
+ * @tokens: string of tokens
+ *
+ * Return: 1 if matches, 0 otherwise
+ */
 int peek(char **ps, char *es, char *tokens)
 {
 	char *s;
 
 	s = *ps;
-	while (s < es && strchr(" \t\r\v"))
+	while (s < es && strchr(" \t\r\v", *s))
 		s++;
 	*ps = s;
-	return (*s && strchr(toks, *s);	
+	return (*s && strchr(tokens, *s));	
 }
