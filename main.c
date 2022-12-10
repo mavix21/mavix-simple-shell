@@ -2,16 +2,29 @@
 
 /**
  * main - entry point
+ * @ac: arguments counter
+ * @av: arguments vector
  *
  * Return: always EXIT_SUCCESS
  */
-int main(void)
+int main(int ac __attribute__((unused)), char **av)
 {
-	signal(SIGINT, &handle_sigint);
-
 	/* Buffer that will store the user's input */
 	char *line = NULL;
 	struct cmd *cmd_tree;
+	int fd;
+
+	(void) av;
+
+	/* Ensure that three file descriptors are open */
+	while ((fd = open("console", O_RDWR)) >= 0)
+	{
+		if (fd >= 3)
+		{
+			close(fd);
+			break;
+		}
+	}
 
 	/* Read and run input commands */
 	while (getcmd(&line) >= 0)
@@ -20,7 +33,6 @@ int main(void)
 			continue;
 
 		cmd_tree = parsecmd(line);
-
 		if (cmd_tree == NULL)
 			continue;
 
